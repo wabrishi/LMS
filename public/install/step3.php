@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="container">
         <h1 class="mt-5">Site Configuration</h1>
-        <form method="post">
+        <form method="post" action="step4.php">
             <div class="form-group">
                 <label for="site_name">Site Name</label>
                 <input type="text" class="form-control" id="site_name" name="site_name" required>
