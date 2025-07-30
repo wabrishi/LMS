@@ -17,10 +17,10 @@ class LessonController {
         return [];
     }
 
-    public function createLesson($course_id, $title, $content) {
-        $sql = "INSERT INTO lessons (course_id, title, content) VALUES (?, ?, ?)";
+    public function createLesson($course_id, $title, $content, $video_url) {
+        $sql = "INSERT INTO lessons (course_id, title, content, video_url) VALUES (?, ?, ?, ?)";
         if ($stmt = mysqli_prepare($this->db, $sql)) {
-            mysqli_stmt_bind_param($stmt, "iss", $course_id, $title, $content);
+            mysqli_stmt_bind_param($stmt, "isss", $course_id, $title, $content, $video_url);
             return mysqli_stmt_execute($stmt);
         }
         return false;
@@ -37,10 +37,10 @@ class LessonController {
         return null;
     }
 
-    public function updateLesson($id, $title, $content) {
-        $sql = "UPDATE lessons SET title = ?, content = ? WHERE id = ?";
+    public function updateLesson($id, $title, $content, $video_url) {
+        $sql = "UPDATE lessons SET title = ?, content = ?, video_url = ? WHERE id = ?";
         if ($stmt = mysqli_prepare($this->db, $sql)) {
-            mysqli_stmt_bind_param($stmt, "ssi", $title, $content, $id);
+            mysqli_stmt_bind_param($stmt, "sssi", $title, $content, $video_url, $id);
             return mysqli_stmt_execute($stmt);
         }
         return false;

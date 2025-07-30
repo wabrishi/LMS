@@ -24,8 +24,9 @@ if ($course['teacher_id'] != $_SESSION['id']) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $title = trim($_POST['title']);
     $content = trim($_POST['content']);
+    $video_url = trim($_POST['video_url']);
 
-    if ($lessonController->createLesson($course_id, $title, $content)) {
+    if ($lessonController->createLesson($course_id, $title, $content, $video_url)) {
         header("location: manage_lessons.php?course_id=" . $course_id);
     } else {
         echo "Something went wrong. Please try again later.";
@@ -51,6 +52,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-group">
                 <label>Content</label>
                 <textarea name="content" class="form-control" rows="10" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>YouTube Video URL</label>
+                <input type="text" name="video_url" class="form-control">
             </div>
             <button type="submit" class="btn btn-primary">Create Lesson</button>
             <a href="manage_lessons.php?course_id=<?php echo $course_id; ?>" class="btn btn-secondary">Cancel</a>

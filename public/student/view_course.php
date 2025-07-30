@@ -33,9 +33,36 @@ $lessons = $lessonController->getLessonsByCourse($course_id);
         <h3>Lessons</h3>
         <div class="list-group">
             <?php foreach ($lessons as $lesson): ?>
-                <a href="#" class="list-group-item list-group-item-action">
-                    <?php echo htmlspecialchars($lesson['title']); ?>
-                </a>
+                <div class="list-group-item">
+                    <h5><?php echo htmlspecialchars($lesson['title']); ?></h5>
+                    <p><?php echo nl2br(htmlspecialchars($lesson['content'])); ?></p>
+                    <?php if (!empty($lesson['video_url'])): ?>
+                        <?php
+                        // Function to extract YouTube video ID from URL
+                        function getYouTubeVideoId($url) {
+                            $video_id = false;
+                            $url_parts = parse_url($url);
+                            if (isset($url_parts['query'])) {
+                                parse_str($url_parts['query'], $query_params);
+                                if (isset($query_params['v'])) {
+                                    $video_id = $query_params['v'];
+                                }
+                            } elseif (isset($url_parts['path'])) {
+                                $path_parts = explode('/', $url_parts['path']);
+                                $video_id = end($path_parts);
+                            }
+                            return $video_id;
+                        }
+
+                        $video_id = getYouTubeVideoId($lesson['video_url']);
+                        if ($video_id):
+                        ?>
+                        <div class="embed-responsive embed-responsive-16by9 mt-3">
+                            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo htmlspecialchars($video_id); ?>" allowfullscreen></iframe>
+                        </div>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </div>
             <?php endforeach; ?>
         </div>
         <a href="courses.php" class="btn btn-secondary mt-3">Back to Courses</a>
