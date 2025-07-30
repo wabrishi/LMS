@@ -7,6 +7,21 @@ CREATE TABLE roles (
 -- Insert default roles
 INSERT INTO roles (name) VALUES ('Admin'), ('Teacher'), ('Student');
 
+-- Insert default admin user
+INSERT INTO users (username, password, email) VALUES ('admin', '$2y$10$E.qJ4qgL9qK7qZ.y5Y.jJ.A/b9qZ.y5Y.jJ.A/b9qZ.y5Y.jJ.A', 'admin@example.com');
+SET @admin_id = LAST_INSERT_ID();
+INSERT INTO user_roles (user_id, role_id) VALUES (@admin_id, (SELECT id FROM roles WHERE name = 'Admin'));
+
+-- Insert default teacher user
+INSERT INTO users (username, password, email) VALUES ('teacher', '$2y$10$E.qJ4qgL9qK7qZ.y5Y.jJ.A/b9qZ.y5Y.jJ.A/b9qZ.y5Y.jJ.A', 'teacher@example.com');
+SET @teacher_id = LAST_INSERT_ID();
+INSERT INTO user_roles (user_id, role_id) VALUES (@teacher_id, (SELECT id FROM roles WHERE name = 'Teacher'));
+
+-- Insert default student user
+INSERT INTO users (username, password, email) VALUES ('student', '$2y$10$E.qJ4qgL9qK7qZ.y5Y.jJ.A/b9qZ.y5Y.jJ.A/b9qZ.y5Y.jJ.A', 'student@example.com');
+SET @student_id = LAST_INSERT_ID();
+INSERT INTO user_roles (user_id, role_id) VALUES (@student_id, (SELECT id FROM roles WHERE name = 'Student'));
+
 -- Create users table
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
