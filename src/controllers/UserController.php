@@ -64,6 +64,13 @@ class UserController {
         }
 
         if(empty($username_err) && empty($email_err) && empty($password_err)){
+            // Check if roles table exists and has a 'Student' role
+            $sql_check_role = "SELECT id FROM roles WHERE name = 'Student'";
+            $result = mysqli_query($this->db, $sql_check_role);
+            if(mysqli_num_rows($result) == 0){
+                return ["'Student' role not found in the database. Please run the setup script."];
+            }
+
             $sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
             if($stmt = mysqli_prepare($this->db, $sql)){
                 mysqli_stmt_bind_param($stmt, "sss", $param_username, $param_email, $param_password);

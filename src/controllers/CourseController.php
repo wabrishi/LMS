@@ -24,6 +24,17 @@ class CourseController {
     }
 
     public function createCourse($title, $description, $teacher_id) {
+        // Check if teacher exists
+        $sql_check_teacher = "SELECT id FROM users WHERE id = ? AND id IN (SELECT user_id FROM user_roles WHERE role_id = (SELECT id FROM roles WHERE name = 'Teacher'))";
+        if($stmt_check = mysqli_prepare($this->db, $sql_check_teacher)){
+            mysqli_stmt_bind_param($stmt_check, "i", $teacher_id);
+            mysqli_stmt_execute($stmt_check);
+            mysqli_stmt_store_result($stmt_check);
+            if(mysqli_stmt_num_rows($stmt_check) == 0){
+                return false; // Teacher not found or is not a teacher
+            }
+        }
+
         $sql = "INSERT INTO courses (title, description, teacher_id) VALUES (?, ?, ?)";
         if ($stmt = mysqli_prepare($this->db, $sql)) {
             mysqli_stmt_bind_param($stmt, "ssi", $title, $description, $teacher_id);
